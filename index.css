@@ -1,0 +1,21 @@
+#nav{
+    height: 50px;
+    text-align: center;
+    font-size: 20px;
+}
+
+#container{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px ;
+    text-align: center;
+}
+
+div{
+    border: 2px solid rgb(72, 64, 64);
+}
+
+#container>div>img{
+    height: 200px;
+    width: 200px;
+}

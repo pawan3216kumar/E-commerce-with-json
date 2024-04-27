@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            body{
+                background-color: rgb(81, 50, 216);
+                color: white;
+                text-align: center;
+                margin: auto
+            }
+            h2{
+                font-size: 40px;
+            }
+            form>input{
+                font-size: 20px
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Signup Page</h2>
+        <form id="Signup">
+            <input type="text" placeholder="Enter UserName"><br>
+            <input type="email" placeholder="Enter Email"><br>
+            <input type="password" placeholder="Enter Password"><br>
+            <input type="submit">
+        </form>
+
+        <h2>Login Page</h2>
+        <form id="login">
+            <input type="email" placeholder="email"><br>
+            <input type="password" placeholder="password">
+            <br>
+            <input type="Submit">
+        </form>
+    </body>
+</html>
+
+<script>
+    let form = document.querySelector("#Signup")
+
+    let handleSubmit =  async(event) =>{
+          event.preventDefault()
+
+          let value = event.target;
+          console.log(value)
+          let name = value[0].value;
+          let email = value[1].value;
+          let password = value[2].value
+         
+
+          if(email.length ===0 || password.length === 0){
+              alert("please enter the data")
+          }else{
+
+            let obj = {
+            name ,
+            email, 
+            password
+          }
+
+          
+       fetch("http://localhost:3000/users" , {
+        method : "POST",
+        headers : {
+            "Content-Type" : "application/json",
+          },
+          body : JSON.stringify(obj)
+       })
+         .then((res)=>{
+                console.log(" Signup Successfully")
+                alert("Signup Successfully")
+            })
+            .catch((error)=>{
+            console.log("err" , error)
+            })
+        }
+       
+    }
+         
+
+    form.addEventListener("submit" , (event) =>{
+        handleSubmit(event)
+    } )
+
+// ---login--------
+
+let login = document.querySelector("#login")
+
+let handleformSubmit = async(event) =>{
+    event.preventDefault()
+   let data = event.target;
+   
+   let lemail = data[0].value;
+   let lpassword = data[1].value;
+
+  let res = await fetch("http://localhost:3000/users")
+  let result = await res.json();
+  console.log(result)
+
+  let flag = false
+  result.forEach((ele ,i)=>{
+    if(lemail.length === 0){
+        return("pleae fill the form")
+    }
+        if(ele.email === lemail){
+            if(ele.password === lpassword){
+                flag = true
+                alert("login successfully")
+                localStorage.setItem("loginData" , JSON.stringify(ele))
+                window.location.href = "index.html"
+            }else{
+                alert("wrong email or password")
+                
+            }
+        }  
+  }) 
+
+  if(flag == false){
+    alert("User Not Found, Please Register")
+}
+}
+
+login.addEventListener("submit" , (event)=>{
+    handleformSubmit(event)
+})
+</script>
